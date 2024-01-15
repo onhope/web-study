@@ -32,16 +32,21 @@
       <script>
         function addTodo() {
           let input_item = $("#input-area").val(); // 사용자가 입력한 input값 가져오기
+          let id = Math.floor(Math.random()*100000) // 새로 생성한 li에 id 부여 (삭제위해)
           let list_item = `
-            <li class="list-group-item d-flex justify-content-between align-items-start">
+            <li class="list-group-item d-flex justify-content-between align-items-start list-${id}">
               <div class="ms-2 me-auto">
                 <div class="fw-bold">${input_item}</div>
               </div>
-              <span class="badge bg-primary rounded-pill" onclick="deleteTodo()">삭제</span>
+              <span class="badge bg-primary rounded-pill" onclick="deleteTodo(${id})">삭제</span>
             </li>
           `
           $("#list-group").append(list_item);
           $("#input-area").val(""); // 입력한 input 값은 비워주기
+        }
+        
+        function deleteTodo(id) {
+          $(".list-"+id).remove();
         }
       </script>
   </div>
