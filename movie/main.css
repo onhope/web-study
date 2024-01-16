@@ -10,3 +10,7 @@ body {
   margin-top: 30px;
   text-align: center;
 }
+
+.btn-success {
+  width: 100%;
+}
