@@ -55,8 +55,8 @@
           <p>Modal body text goes here.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <input type="text" class="form-control" id="review" style="width:70%">
+          <button type="button" class="btn btn-primary" onclick="addReview()">후기 쓰기</button>
         </div>
       </div>
     </div>
@@ -78,9 +78,9 @@
         type : 'get',
         success : function(json) {
           $("#movie-list").html("");        
-          // console.log(json);    
+          console.log(json);    
           let movie_list = json.results;
-          console.log(movie_list);
+          // console.log(movie_list);
           
           for (let i=0; i < movie_list.length; i++) {
             movie_item = `
@@ -102,6 +102,21 @@
 
     // review popup
     function review(id) {
+
+      $.ajax({
+        url : `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=8a67b22a2770f99620ee3375fb6a0f43&page=1`,
+        data : {},    
+        type : 'get',
+        success : function(json){
+          console.log(json.results);
+          let reviews = json.results;
+          $(".modal-body").html("");
+          for (let i=0; i < reviews.length; i++) {
+            $(".modal-body").append(`<p>${reviews[i].content}.</p>`)
+          }
+        }
+      })
+
       $('#review-modal').modal('show')
     }
   </script>
