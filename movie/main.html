@@ -29,11 +29,11 @@
       <a class="btn btn-danger btn-lg" href="#" role="button">Learn more</a>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3">
+    <div class="row row-cols-1 row-cols-md-3"  id="movie-list">
       <div class="col mb-4">
         <div class="card">
           <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
+          <div class="card-body" id="card-body">
             <h5 class="card-title">Card title</h5>
             <button type="button" class="btn btn-success" onclick="review()">리뷰 보기</button>
           </div>
@@ -63,12 +63,45 @@
   </div>
 
   <!-- 부트스트랩 4.5 -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
   <!-- JS -->
   <script>
-    function review() {
+    $(document).ready(function(){
+      console.log("시작");
+      // API 연결
+      $.ajax({              
+        url : 
+        'https://api.themoviedb.org/3/movie/popular?api_key=8a67b22a2770f99620ee3375fb6a0f43&page=1', // 요청할 서버url         
+        data : {"key" : "value"},    
+        type : 'get',
+        success : function(json) {
+          $("#movie-list").html("");        
+          // console.log(json);    
+          let movie_list = json.results;
+          console.log(movie_list);
+          
+          for (let i=0; i < movie_list.length; i++) {
+            movie_item = `
+            <div class="col mb-4">
+              <div class="card">
+                <img src="https://image.tmdb.org/t/p/w500/${movie_list[i].poster_path}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">${movie_list[i].original_title}</h5>
+                  <button type="button" class="btn btn-success" onclick="review(${movie_list[i].id})">리뷰 보기</button>
+                </div>
+              </div>
+            </div>
+            `
+            $("#movie-list").append(movie_item);
+          }
+        }
+      })
+    });
+
+    // review popup
+    function review(id) {
       $('#review-modal').modal('show')
     }
   </script>
